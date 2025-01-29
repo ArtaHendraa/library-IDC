@@ -23,7 +23,7 @@ class BooksController extends Controller
               "data_per_page" => $books -> perPage(), 
               "last_page" => $books -> lastPage(),
               "success" => true,
-              "message" => "Success Fetching Book Data",
+              "message" => "Success Fetching Books Data",
               "next_page" => $books -> nextPageUrl(), 
               "current_page" => $books -> currentPage(), 
               "prev_page" => $books->previousPageUrl(),
@@ -74,7 +74,7 @@ class BooksController extends Controller
             return response()->json([
               "code" => 201,
               "success" => true,
-              "message" => "Berhasil Menambahkan Data Post!"
+              "message" => "Successfully Added Book Data"
             ], 201);
 
         } catch (Exception $error) {
@@ -165,7 +165,7 @@ class BooksController extends Controller
           return response()->json([
             "code" => 200,
             "success" => true,
-            "message" => "Book updated successfully!"
+            "message" => "Book Data updated successfully!"
           ], 200);
 
         } catch(Exception $error){
@@ -202,7 +202,7 @@ class BooksController extends Controller
               "message" => "Book deleted successfully",
               "data" => null
           ], 200);
-          
+
         } catch (Exception $error){
           return response()->json([
             "status_code" => 500,
