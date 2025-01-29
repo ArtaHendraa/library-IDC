@@ -92,7 +92,32 @@ class BooksController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try{
+          $book = Books::find($id);
+          if(!$book){
+            return response()->json([
+              "status_code" => 404,
+              "data" => null,
+              "success" => false,
+              "message" => "Book Not Found"
+            ], 404);
+          }
+
+          return response()->json([
+            "code" => 200,
+            "success" => true,
+            "message" => "Success Fatching Book Data",
+            "data" => $book
+          ], 200);
+
+        } catch(Exception $error) {
+          return response()->json([
+            "status_code" => 500,
+            "data" => null,
+            "success" => false,
+            "message" => "$error"
+          ], 500);
+        }
     }
 
     /**
@@ -100,7 +125,57 @@ class BooksController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try{
+          $book = Books::find($id);
+          if(!$book){
+            return response()->json([
+              "status_code" => 404,
+              "data" => null,
+              "success" => false,
+              "message" => "Book Not Found"
+            ], 404);
+          }
+
+          $request->validate([
+            "title" => "required|string|min:5|max:255",
+            "description" => "required|string|min:50",
+            "author" => "required|string|min:4|max:255",
+          ],[
+            "title.required" => "Title Cannot Be Empty",
+            "title.string" => "Title Must Be A String",
+            "title.min" => "Title Must Have At Least 5 Characters",
+            "title.max" => "Title Must Have A Maksimum Of 255 Characters",
+
+            "description.required" => "Description Cannot Be Empty",
+            "description.string" => "Description Must Be A String",
+            "description.min" => "Description Must Have At Least 50 Characters",
+
+            "author.required" => "Author Cannot Be Empty",
+            "author.string" => "Author Must Be A String",
+            "author.min" => "Author Must Have At Least 4 Characters",
+            "author.max" => "Author Must Have A Maksimum Of 255 Characters",
+          ]);
+
+          $book->update([
+            "title" => $request->title ?? $book -> title,
+            "description" => $request->description ?? $book -> description,
+            "author" => $request->author ?? $book -> author,
+          ]);
+
+          return response()->json([
+            "code" => 200,
+            "success" => true,
+            "message" => "Book updated successfully!"
+          ], 200);
+
+        } catch(Exception $error){
+          return response()->json([
+            "status_code" => 500,
+            "data" => null,
+            "success" => false,
+            "message" => "$error"
+          ], 500);
+        }
     }
 
     /**
@@ -108,6 +183,33 @@ class BooksController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try{
+          $book = Books::find($id);
+          if(!$book){
+            return response()->json([
+              "status_code" => 404,
+              "data" => null,
+              "success" => false,
+              "message" => "Book Not Found"
+            ], 404);
+          }
+
+          $book->delete();
+
+          return response()->json([
+              "status_code" => 200,
+              "success" => true,
+              "message" => "Book deleted successfully",
+              "data" => null
+          ], 200);
+          
+        } catch (Exception $error){
+          return response()->json([
+            "status_code" => 500,
+            "data" => null,
+            "success" => false,
+            "message" => "$error"
+          ], 500);
+        }
     }
 }
